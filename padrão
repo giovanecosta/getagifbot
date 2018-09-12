@@ -33,7 +33,7 @@ def main(bot, update):
 
     # Welcome message
     msg = "Oi!\n"
-    msg += "Meu nome é {0} e estou aqi para ajuda-lo.\n".format(me.first_name)
+    msg += "Meu nome é {0} e estou aqui para ajuda-lo.\n".format(me.first_name)
     msg += "O que você gostaria de fazer?\n\n"
     msg += "/support - Abre o menu de suporte\n"
     msg += "/settings - Abre o menu de configurações\n\n"
