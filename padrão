@@ -9,9 +9,10 @@ from telepot.namedtuple import (ForceReply, InlineKeyboardButton,
 token = '667895949:AAFa5ic_yU0boRWKCh5EKe7vlE08fjAHQYM'
 bot = telepot.Bot(token)
 msg = bot.getUpdates()
+"""
 answerer = telepot.helper.Answerer(bot)
 
-"""def on_inline_query(msg):
+def on_inline_query(msg):
     def compute():
         query_id, from_id, query_string = telepot.glance(msg, flavor='inline_query')
         print('Inline Query:', query_id, from_id, query_string)
@@ -31,7 +32,7 @@ def on_chosen_inline_result(msg):
     result_id, from_id, query_string = telepot.glance(msg, flavor='chosen_inline_result')
     print ('Chosen Inline Result:', result_id, from_id, query_string)
 """
-def handle(msg):
+def responder(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
     print(content_type, chat_type, chat_id)
 
@@ -39,7 +40,7 @@ def handle(msg):
         bot.sendMessage(chat_id, msg['text'])
 
 # Mantém o bot em escuta o tempo todo
-MessageLoop(bot, handle).run_as_thread()
+MessageLoop(bot, responder).run_as_thread()
 print ('Listening ...')
 while 1:
     time.sleep(10)
