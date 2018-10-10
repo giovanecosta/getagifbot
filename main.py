@@ -1,26 +1,37 @@
-def main(bot, update):
-    """
-        Shows an welcome message and help info about the available commands.
-    """
-    me = bot.get_me()
+import telepot
+import time
+from telepot.loop import MessageLoop
+from telepot.namedtuple import (ForceReply, InlineKeyboardButton,
+                                InlineKeyboardMarkup, KeyboardButton,
+                                ReplyKeyboardMarkup, InlineQueryResultArticle, 
+                                InputTextMessageContent)
 
-    # Welcome message
-    msg = "Hello!\n"
-    msg += "I'm {0} and I came here to help you.\n".format(me.first_name)
-    msg += "What would you like to do?\n\n"
-    msg += "/support - Opens a new support ticket\n"
-    msg += "/settings - Settings of your account\n\n"
+token = '667895949:AAFa5ic_yU0boRWKCh5EKe7vlE08fjAHQYM'
+bot = telepot.Bot(token)
+msg = bot.getUpdates()
+global saida
+saida = 0
 
-    # Commands menu
-    main_menu_keyboard = [[telegram.KeyboardButton('/support')],
-                          [telegram.KeyboardButton('/settings')]]
-    reply_kb_markup = telegram.ReplyKeyboardMarkup(main_menu_keyboard,
-                                                   resize_keyboard=True,
-                                                   one_time_keyboard=True)
+def inicio(msg):
+    global saida
+    if(saida == 0):
+        content_type, chat_type, chat_id = telepot.glance(msg)
+        print(content_type, chat_type, chat_id)
+        bot.sendMessage(chat_id, "Olá!\nEu sou o PullBot.\n"
+                                "Qual a pergunta que você gostaria de fazer?")
+        nome = InputTextMessageContent()
+        saida = 1
 
-    # Send the message with menu
-    bot.send_message(chat_id=update.message.chat_id,
-                     text=msg,
-                     reply_markup=reply_kb_markup)
-    return main
+def criarEnquete(msg):
+    global saida
+    if(saida == 0):    
+        content_type, chat_type, chat_id = telepot.glance(msg)
+        print(content_type, chat_type, chat_id)
+        bot.sendMessage(chat_id, "text")
+        saida = 1
 
+# Mantém o bot em escuta o tempo todo
+MessageLoop(bot, inicio).run_as_thread()
+print ('Listening ...')
+while 1:
+    time.sleep(10)
