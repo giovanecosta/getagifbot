@@ -9,29 +9,29 @@ from telepot.namedtuple import (ForceReply, InlineKeyboardButton,
 token = '667895949:AAFa5ic_yU0boRWKCh5EKe7vlE08fjAHQYM'
 bot = telepot.Bot(token)
 msg = bot.getUpdates()
-global saida
-saida = 0
 
 def inicio(msg):
-    global saida
-    if(saida == 0):
+ 
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id)
-        bot.sendMessage(chat_id, "Olá!\nEu sou o PullBot.\n"
-                                "Qual a pergunta que você gostaria de fazer?")
-        nome = InputTextMessageContent()
+        bot.sendMessage(chat_id, "No Hadadd! É claro!")
         saida = 1
 
-def criarEnquete(msg):
-    global saida
-    if(saida == 0):    
+def criarEnquete(msg):   
         content_type, chat_type, chat_id = telepot.glance(msg)
-        print(content_type, chat_type, chat_id)
-        bot.sendMessage(chat_id, "text")
+        texto = msg['text']
+        bot.sendMessage(chat_id, "Essa é sua pergunta:")
+        bot.sendMessage(chat_id, texto)
         saida = 1
 
 # Mantém o bot em escuta o tempo todo
-MessageLoop(bot, inicio).run_as_thread()
+bot.message_loop(
+    {
+        'chat': inicio,
+        'callback_query': criarEnquete,
+    }
+)
+
 print ('Listening ...')
-while 1:
-    time.sleep(10)
+while True:
+    pass
