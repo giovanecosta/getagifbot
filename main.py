@@ -11,27 +11,34 @@ bot = telepot.Bot(token)
 msg = bot.getUpdates()
 
 def inicio(msg):
- 
         content_type, chat_type, chat_id = telepot.glance(msg)
-        print(content_type, chat_type, chat_id)
-        bot.sendMessage(chat_id, "No Hadadd! É claro!")
-        saida = 1
+        bot.sendMessage(chat_id, "Oi! Eu sou o PullBot!\nQual o título da enquete que você quer abrir?")
 
-def criarEnquete(msg):   
+def enquete(msg):   
         content_type, chat_type, chat_id = telepot.glance(msg)
         texto = msg['text']
-        bot.sendMessage(chat_id, "Essa é sua pergunta:")
         bot.sendMessage(chat_id, texto)
-        saida = 1
+
+def opcoes(msg):
+        if msg.lower() == "opções":
+                coletando = 0
+                while coletando == 0:
+                        content_type, chat_type, chat_id = telepot.glance(msg)
+                        opc = []
+                        opc.append(msg['text'])
+                        if msg.lower() == "fim":
+                                coletando = 1
+                                apc.pop(-1)
+        for i in opc:
+                bot.sendMessage(chat_id, i)
 
 # Mantém o bot em escuta o tempo todo
 bot.message_loop(
     {
-        'chat': inicio,
-        'callback_query': criarEnquete,
+        'chat': opcoes,
     }
 )
 
 print ('Listening ...')
-while True:
-    pass
+while 1:
+    time.sleep(3)
