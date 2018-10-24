@@ -9,15 +9,19 @@ from telepot.namedtuple import (ForceReply, InlineKeyboardButton,
 token = '667895949:AAFa5ic_yU0boRWKCh5EKe7vlE08fjAHQYM'
 bot = telepot.Bot(token)
 msg = bot.getUpdates()
+global start
+start = 0
 
 def inicio(msg):
         content_type, chat_type, chat_id = telepot.glance(msg)
         bot.sendMessage(chat_id, "Oi! Eu sou o PullBot!\nQual o título da enquete que você quer abrir?")
-
+        start = 1
+        
 def enquete(msg):   
         content_type, chat_type, chat_id = telepot.glance(msg)
         texto = msg['text']
         bot.sendMessage(chat_id, texto)
+        start = 1
 
 def opcoes(msg):
         if msg.lower() == "opções":
@@ -31,12 +35,13 @@ def opcoes(msg):
                                 apc.pop(-1)
         for i in opc:
                 bot.sendMessage(chat_id, i)
+        start = 1
 
 # Mantém o bot em escuta o tempo todo
 bot.message_loop(
-    {
-        'chat': opcoes,
-    }
+        {
+        'chat': inicio,
+        }
 )
 
 print ('Listening ...')
