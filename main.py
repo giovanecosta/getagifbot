@@ -1,4 +1,5 @@
 import telepot
+import json
 import time
 from telepot.loop import MessageLoop
 from telepot.namedtuple import (ForceReply, InlineKeyboardButton,
@@ -24,13 +25,18 @@ def enquete(msg):
         start = 1
 
 def opcoes(msg):
+        content_type, chat_type, chat_id = telepot.glance(msg)
+        bot.sendMessage(chat_id, "Quando estiver pronto para colocar as opções, digite: opções\n")
+        content_type, chat_type, chat_id = telepot.glance(msg)
         if msg.lower() == "opções":
                 coletando = 0
+                bot.sendMessage(chat_id, "Digite as opções, quando terminar escreva: fim\n")
                 while coletando == 0:
                         content_type, chat_type, chat_id = telepot.glance(msg)
                         opc = []
                         opc.append(msg['text'])
                         if msg.lower() == "fim":
+                                bot.sendMessage(chat_id, "Opções registradas.\n")
                                 coletando = 1
                                 apc.pop(-1)
         for i in opc:
@@ -40,7 +46,7 @@ def opcoes(msg):
 # Mantém o bot em escuta o tempo todo
 bot.message_loop(
         {
-        'chat': inicio,
+        'chat': opcoes,
         }
 )
 
