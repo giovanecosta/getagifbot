@@ -12,6 +12,7 @@ msg = bot.getUpdates()
 cmd = commands.Commands(token)
 
 def inicio(msg1):
+        bot.sendMessage(chat_id, "Escreva sua enquete! Não esqueça de usar ? no final!")
         content_type, chat_type, chat_id = telepot.glance(msg1)
         cmd.getCommand(msg1,chat_id)
         
