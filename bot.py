@@ -1,35 +1,46 @@
-import requests,commands,json,time
+import requests
 import telepot
+from random import randint
+from bs4 import BeautifulSoup
 from telepot.loop import MessageLoop
-from telepot.namedtuple import (ForceReply, InlineKeyboardButton,
-                                InlineKeyboardMarkup, InlineQueryResultArticle,
-                                InputTextMessageContent, KeyboardButton,
-                                ReplyKeyboardMarkup)
+from unicodedata import normalize
 
-token = '703302532:AAFAJKCE9ZfnX9xf2Bdb6i88JWLbL0JXAIs'
+token = '791343877:AAGTLHGSGK6Ga5_zppQi9c9PMvEK26O0b7k'
 bot = telepot.Bot(token)
 msg = bot.getUpdates()
-cmd = commands.Commands(token)
+print("Bot iniciado!")
 
-def inicio(msg1):
-        bot.sendMessage(chat_id, "Escreva sua enquete! Não esqueça de usar ? no final!")
-        content_type, chat_type, chat_id = telepot.glance(msg1)
-        cmd.getCommand(msg1,chat_id)
-        
+# RASPAGEM DE GIFS
 
-def on_callback_query(msg2):
-        data = msg2
-        print(data)
+def raspa(busca,chatID):
+    url = 'https://giphy.com/search/' + busca
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content, 'html.parser')
+    gifs = soup.findAll('img', class_='gif_gifImage__3dFjs gif_gifLink__TKut_')
+    num = randint(1,30) #REALIZA UM SORTEIO ENTRE OS 30 PRIMEIROS GIFS DA BUSCA
+    count = 0
+    for gif in gifs:
+        count += 1
+        imagem = gif['src']
+        if count == num:
+            bot.sendPhoto(chatID, imagem)
+            
+# TRATAMENTO DAS MENSAGENS E CRIAÇÃO DO LOG
 
-if __name__ == "__main__":
-        print("Servidor on...")
-        MessageLoop(bot, {
-                "chat": inicio,
-                "callback_query": on_callback_query
-        }).run_as_thread()
-        while 1:
-                try:
-                        time.sleep(3)
-                        pass
-                except:
-                        break
+def defaul(msg):
+    chatID = msg['chat']['id']
+    nome = msg['chat']['first_name']
+    sobrenome = msg['chat']['last_name']
+    mensagem = (msg['text'])
+    mensagem = mensagem.lower()
+    mensagem = normalize('NFKD', mensagem).encode('ASCII', 'ignore').decode('ASCII')
+    print('[',chatID,']',nome,sobrenome,':',msg['text'])
+    if('/gif ' in mensagem): # FAZ A CHAMADA NO TELEGRAM PARA BUSCAR O GIF
+        busca = msg['text'].lower().replace('/gif ','')
+        raspa(busca,chatID)
+
+# MANTEM O BOT RODANDO
+
+bot.message_loop(defaul)
+while True:
+    pass
