@@ -16,12 +16,14 @@ def raspa(busca,chatID):
     url = 'https://giphy.com/search/' + busca
     r = requests.get(url)
     soup = BeautifulSoup(r.content, 'html.parser')
-    gifs = soup.findAll('img', class_='gif_gifImage__3dFjs gif_gifLink__TKut_')
-    num = randint(1,30) #REALIZA UM SORTEIO ENTRE OS 30 PRIMEIROS GIFS DA BUSCA
+    gifs = soup.findAll('a', class_='_2SwDiFPqIlZmUDkxHNOeqU _15h4llpqfh5ZeEHs8_a1s6 _1CcFQw7H4TrtiyIevX7Wi9 _1Fba10Vcpc4_UBtLy_oMYy')
+    num = randint(1,25) #REALIZA UM SORTEIO ENTRE OS 25 GIFS DA PÁGINA
     count = 0
+    print(type(gifs))
+    print(len(gifs))
     for gif in gifs:
         count += 1
-        imagem = gif['src']
+        imagem = gif.src
         if count == num:
             bot.sendPhoto(chatID, imagem)
             
