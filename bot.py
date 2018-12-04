@@ -23,7 +23,7 @@ def raspa(busca,chatID):
     print(len(gifs))
     for gif in gifs:
         count += 1
-        imagem = gif.src
+        imagem = gif['href']
         if count == num:
             bot.sendPhoto(chatID, imagem)
             
